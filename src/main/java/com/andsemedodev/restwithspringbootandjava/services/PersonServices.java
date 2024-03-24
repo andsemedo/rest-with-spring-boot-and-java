@@ -1,6 +1,7 @@
 package com.andsemedodev.restwithspringbootandjava.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.andsemedodev.restwithspringbootandjava.exceptions.ResourceNotFoundException;
@@ -36,6 +37,11 @@ public class PersonServices {
 	public Person create(Person person) {
 
 		logger.info("Creating one person!");
+
+		Optional<Person> personOptional = repository.findByEmail(person.getEmail());
+
+		if (personOptional.isPresent())
+			throw new ResourceNotFoundException("Person already exists with given email: " + person.getEmail());
 		
 		return repository.save(person);
 	}
